@@ -42,17 +42,17 @@ jobs:
           name: Unit tests
           command: yarn test
 
-    build:
-      executor: builder
-      steps:
-        - checkout
-        - attach_workspace:
-            at: ~/app
-        - restore_cache:
-            key: dependencies-cache-{{ checksum "package.json" }}
-        - run:
-            name: Build
-            command: yarn build
+  build:
+    executor: builder
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - restore_cache:
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Build
+          command: yarn build
 
 workflows:
   version: 2
