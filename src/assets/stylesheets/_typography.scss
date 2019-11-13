@@ -1,0 +1,25 @@
+.app-text-right {
+  text-align: right;
+  float: right;
+  @include govuk-clearfix;
+}
+
+.app-text-grey {
+  color: govuk-colour("dark-grey");
+}
+
+.app-initials {
+  $size: 45px;
+
+  background-size: contain;
+  float: right;
+  color: white;
+  border-radius: 50%;
+  background-color: $app-background-color;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  text-align: center;
+  margin: 0;
+  border: 2px solid white;
+}

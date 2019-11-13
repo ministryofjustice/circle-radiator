@@ -1,0 +1,70 @@
+version: 2.1
+executors:
+  builder:
+    docker:
+      - image: circleci/node:12.13.0
+    working_directory: ~/app
+
+jobs:
+  setup:
+    executor: builder
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            - dependencies-cache
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          key: dependencies-cache-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache
+      - persist_to_workspace:
+          root: ~/app
+          paths: .
+
+  test:
+    executor: builder
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - restore_cache:
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Lint
+          command: yarn lint
+      - run:
+          name: Unit tests
+          command: yarn test
+
+    build:
+      executor: builder
+      steps:
+        - checkout
+        - attach_workspace:
+            at: ~/app
+        - restore_cache:
+            key: dependencies-cache-{{ checksum "package.json" }}
+        - run:
+            name: Build
+            command: yarn build
+
+workflows:
+  version: 2
+  test-and-build:
+    jobs:
+      - setup:
+          filters:
+            tags:
+              ignore: /.*/
+      - test:
+          requires:
+            - setup
+      - build:
+          requires:
+            - test

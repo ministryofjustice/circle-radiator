@@ -1,0 +1,50 @@
+{
+  "name": "moj-circle-radiator",
+  "description": "",
+  "version": "0.1.0",
+  "author": "MoJ D&T Probation in Court <probation-in-court-team@digital.justice.gov.uk>",
+  "license": "MIT",
+  "private": true,
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ministryofjustice/circle-radiator,git"
+  },
+  "engines": {
+    "node": ">=12.13.0 <13.0.0",
+    "yarn": "^1.19.0"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@ministryofjustice/frontend": "0.0.17-alpha",
+    "axios": "0.19.0",
+    "govuk-frontend": "3.3.0",
+    "moment": "2.24.0",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "react-scripts": "3.2.0"
+  },
+  "devDependencies": {
+    "node-sass": "4.13.0"
+  }
+}

@@ -1,0 +1,18 @@
+$govuk-page-width: 1800px;
+$moj-page-width: $govuk-page-width;
+$govuk-brand-colour: #204060;
+$app-background-color: #2c2c2c;
+$app-background-color-dark: #252727;
+
+@import "../../../node_modules/govuk-frontend/govuk/all";
+@import "../../../node_modules/@ministryofjustice/frontend/moj/all";
+
+@import "_animation";
+@import "_card";
+@import "_overrides";
+@import "_typography";
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
