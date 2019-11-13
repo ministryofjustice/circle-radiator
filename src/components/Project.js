@@ -7,6 +7,8 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
 
   const [data, setData] = useState({ dev: {}, preprod: {}, prod: {} })
   const fetchDataCallback = useCallback(fetchData, [])
+  const fastPollRateSeconds = 5
+  const pollRateSeconds = 30
 
   async function fetchData () {
     const result = await axios(`https://circleci.com/api/v1.1/project/${vcs}/${username}/${reponame}`)
@@ -14,11 +16,6 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
   }
 
   function configureData ($data) {
-
-    function isWatchedBuild ($item) {
-      return $item.hasOwnProperty('all_commit_details') && $item.all_commit_details.length && $item.all_commit_details[0].branch === 'master' && (!ignoreCancelled || $item.status !== 'canceled')
-    }
-
     const devJobData = $data.filter($item => {
       return isWatchedBuild($item) && $item.workflows.job_name !== preprodjob && $item.workflows.job_name !== prodjob
     }).shift()
@@ -31,8 +28,19 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
       return isWatchedBuild($item) && $item.workflows.job_name === prodjob
     }).shift()
 
+    function isWatchedBuild ($item) {
+      return $item.branch === 'master' && $item.hasOwnProperty('workflows') && (!ignoreCancelled || $item.status !== 'canceled')
+    }
+
+    function shouldFastPoll() {
+      const fastPollStatuses = ['running', 'queued', 'not_running']
+      return (devJobData && fastPollStatuses.some(el => devJobData.status.includes(el))) ||
+        (preprodJobData && fastPollStatuses.some(el => preprodJobData.status.includes(el))) ||
+        (prodJobData && fastPollStatuses.some(el => prodJobData.status.includes(el)))
+    }
+
     setData({ dev: devJobData, preprod: preprodJobData, prod: prodJobData })
-    setTimeout(fetchData, 30 * 1000)
+    setTimeout(fetchData, (shouldFastPoll() ? fastPollRateSeconds : pollRateSeconds) * 1000)
   }
 
   useEffect(() => {
