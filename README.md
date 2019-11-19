@@ -52,3 +52,13 @@ An example file is provided.
 Build states are based on existing CircleCI colours.
 
 Cancelled jobs can be ignored by setting the *ignoreCancelled* flag if required.
+
+### Ignore changes to config file
+
+The configuration JSON is required in order to run tests and build from GitHub so it cannot be omitted. 
+
+Ignore your local changes to the configuration file:
+
+```
+git update-index --skip-worktree src/data/config.json
+```
