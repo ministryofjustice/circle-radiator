@@ -1,0 +1,30 @@
+{
+  "org": "Ministry of Justice",
+  "team": "Your team name",
+  "projects": [
+    {
+      "project": "Your project name",
+      "username": "ministryofjustice",
+      "reponame": "your-project",
+      "preprodjob": "deploy_preprod_job",
+      "prodjob": "deploy_prod_job",
+      "ignoreCancelled": false
+    },
+    {
+      "project": "Your 2nd project name",
+      "username": "ministryofjustice",
+      "reponame": "your-project-2",
+      "preprodjob": "deploy_preprod_job",
+      "prodjob": "deploy_prod_job",
+      "ignoreCancelled": false
+    },
+    {
+      "project": "Your 3rd project name",
+      "username": "ministryofjustice",
+      "reponame": "your-project-3",
+      "preprodjob": "deploy_preprod_job",
+      "prodjob": "deploy_prod_job",
+      "ignoreCancelled": false
+    }
+  ]
+}
