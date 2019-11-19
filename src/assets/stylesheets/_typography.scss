@@ -8,6 +8,11 @@
   color: govuk-colour("dark-grey");
 }
 
+.app-mark {
+  background-color: transparent;
+  color: govuk-colour("green");
+}
+
 .app-initials {
   $size: 45px;
 
@@ -22,4 +27,8 @@
   text-align: center;
   margin: 0;
   border: 2px solid white;
+}
+
+.app-text-overlay {
+  color: rgba(255, 255, 255, 0.5);
 }

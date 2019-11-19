@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react'
-import { projects } from './data/projects.json'
+
+import { org, team, projects } from './data/config.json'
 
 import Header from './components/Header'
 import Project from './components/Project'
-import Footer from './components/Footer'
 
 function App () {
   return (
     <Fragment>
-      <Header/>
-      <div className="govuk-width-container">
+      <Header org={org} team={team}/>
+      <div className="govuk-width-container govuk-!-padding-bottom-8">
         <main id="main-content">
 
           {projects.map(($item, $key) =>
@@ -18,7 +18,6 @@ function App () {
 
         </main>
       </div>
-      <Footer/>
     </Fragment>
   )
 }

@@ -2,19 +2,6 @@
   border-color: $govuk-brand-colour;
 }
 
-.govuk-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid $govuk-brand-colour;
-  background-color: #252727;
-  color: govuk-colour("dark-grey");
-
-  .govuk-footer__link {
-    color: govuk-colour("dark-grey");
-  }
-}
-
 .govuk-template {
   background-color: govuk-colour("black");
 }

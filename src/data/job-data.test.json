@@ -1,0 +1,102 @@
+{
+  "jobData": {
+    "compare": null,
+    "previous_successful_build": null,
+    "build_parameters": {
+      "CIRCLE_JOB": "deploy_dev"
+    },
+    "oss": true,
+    "all_commit_details_truncated": false,
+    "committer_date": "2019-11-13T10:15:46Z",
+    "body": "Signed-off-by: GutHub User <git.user@host.com>",
+    "usage_queued_at": "2019-11-13T14:27:45.805Z",
+    "context_ids": [],
+    "fail_reason": null,
+    "retry_of": null,
+    "reponame": "some-project",
+    "ssh_users": [],
+    "build_url": "https://circleci.com/gh/some-org/some-project/308",
+    "parallel": 1,
+    "failed": true,
+    "branch": "master",
+    "username": "some-org",
+    "author_date": "2019-11-13T10:15:46Z",
+    "why": "github",
+    "user": {
+      "is_user": true,
+      "login": "someGithubUser",
+      "avatar_url": null,
+      "name": "GitHub User",
+      "vcs_type": "github",
+      "id": 3530672
+    },
+    "vcs_revision": "380a578841e13f8f967103d49febe49f4055b9ef",
+    "workflows": {
+      "job_name": "deploy_dev",
+      "job_id": "4c8-ebca5-40dbe161d28ec4aac1e74e94",
+      "workflow_id": "4b-9f40f0e9cd7c9-c7-e2282-c2acab8233",
+      "workspace_id": "f4-a4e87d4799fc4-432-6eb7-30501336db",
+      "upstream_job_ids": [
+        "1b9c6bb5-5a-41b656ff13a424-b2-ca8969",
+        "41e334a-71898-d-9d05bf11-c10ed684669",
+        "0ed-c12-7c21b9bd6320f6720ad-171c4-50"
+      ],
+      "upstream_concurrency_map": {},
+      "workflow_name": "build_test_deploy"
+    },
+    "vcs_tag": null,
+    "build_num": 308,
+    "infrastructure_fail": false,
+    "committer_email": "github.user@host.com",
+    "has_artifacts": true,
+    "previous": {
+      "build_num": 307,
+      "status": "success",
+      "build_time_millis": 207461
+    },
+    "status": "failed",
+    "committer_name": "GitHub User",
+    "retries": null,
+    "subject": "Some useful commit information",
+    "vcs_type": "github",
+    "timedout": false,
+    "dont_build": null,
+    "lifecycle": "finished",
+    "no_dependency_cache": false,
+    "stop_time": "2019-11-13T14:28:21.135Z",
+    "ssh_disabled": false,
+    "build_time_millis": 32570,
+    "picard": null,
+    "circle_yml": null,
+    "messages": [],
+    "is_first_green_build": false,
+    "job_name": null,
+    "start_time": "2019-11-13T14:27:48.565Z",
+    "canceler": null,
+    "all_commit_details": [
+      {
+        "committer_date": "2019-11-13T10:15:46Z",
+        "body": "Signed-off-by: GutHub User <git.user@host.com>",
+        "branch": "master",
+        "author_date": "2019-11-13T10:15:46Z",
+        "committer_email": "git.user@host.com",
+        "commit": "380a578841e13f8f967103d49febe49f4055b9ef",
+        "committer_login": "someGithubUser",
+        "committer_name": "GutHub User",
+        "subject": "Some useful commit information",
+        "commit_url": "https://github.com/some-org/some-project/commit/380a578841e13f8f967103d49febe49f4055b9ef",
+        "author_login": "someGithubUser",
+        "author_name": "GutHub User",
+        "author_email": "git.user@host.com"
+      }
+    ],
+    "platform": "1.0",
+    "outcome": "failed",
+    "vcs_url": "https://github.com/some-org/some-project",
+    "author_name": "GutHub User",
+    "node": null,
+    "queued_at": "2019-11-13T14:27:45.847Z",
+    "canceled": false,
+    "author_email": "git.user@host.com"
+  }
+}

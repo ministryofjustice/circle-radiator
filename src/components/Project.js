@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 import Card from './Card'
@@ -7,11 +7,11 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
 
   const [data, setData] = useState({ dev: {}, preprod: {}, prod: {} })
   const fetchDataCallback = useCallback(fetchData, [])
-  const fastPollRateSeconds = 5
+  const fastPollRateSeconds = 10
   const pollRateSeconds = 30
 
   async function fetchData () {
-    const result = await axios(`https://circleci.com/api/v1.1/project/${vcs}/${username}/${reponame}`)
+    const result = await axios.get(`https://circleci.com/api/v1.1/project/${vcs}/${username}/${reponame}`)
     configureData(result.data)
   }
 
@@ -32,7 +32,7 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
       return $item.branch === 'master' && $item.hasOwnProperty('workflows') && (!ignoreCancelled || $item.status !== 'canceled')
     }
 
-    function shouldFastPoll() {
+    function shouldFastPoll () {
       const fastPollStatuses = ['running', 'queued', 'not_running']
       return (devJobData && fastPollStatuses.some(el => devJobData.status.includes(el))) ||
         (preprodJobData && fastPollStatuses.some(el => preprodJobData.status.includes(el))) ||
@@ -48,19 +48,19 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
   }, [fetchDataCallback])
 
   return (
-    <Fragment>
+    <section className="govuk-!-margin-top-8">
       <h2
-        className="govuk-heading-m govuk-!-margin-top-8 govuk-!-text-colour-white govuk-!-margin-bottom-2">{project}</h2>
+        className="govuk-heading-m govuk-!-text-colour-white govuk-!-margin-bottom-2">{project}</h2>
 
       <div className="govuk-grid-row">
         <section className="govuk-grid-column-one-third">
 
-          <Card title="DEV" data={data.dev}/>
+          <Card title="DEV" data={data.dev} downstream={data.preprod && data.preprod.hasOwnProperty('status')}/>
 
         </section>
         <div className="govuk-grid-column-one-third">
 
-          <Card title="PRE-PROD" data={data.preprod}/>
+          <Card title="PRE-PROD" data={data.preprod} downstream={data.prod && data.prod.hasOwnProperty('status')}/>
 
         </div>
         <div className="govuk-grid-column-one-third">
@@ -69,7 +69,7 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
 
         </div>
       </div>
-    </Fragment>
+    </section>
   )
 }
 

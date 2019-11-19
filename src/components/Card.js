@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import moment from 'moment'
 
-function Card ({ title, data: { lifecycle, status, user = {}, build_num, queued_at, workflows = {}, committer_name, vcs_revision = '' } = {} }) {
+function Card ({ title, downstream, data: { status, user = {}, build_num, queued_at, workflows = {}, committer_name, vcs_revision = '' } = {} }) {
 
   function getInitials ($name = '') {
     return !user.avatar_url && $name ? $name.match(/\b(\w)/g).join('').toUpperCase() : ''
@@ -12,10 +12,17 @@ function Card ({ title, data: { lifecycle, status, user = {}, build_num, queued_
   }
 
   return (
-    <Fragment>
+    <section>
       <div className="app-card--header">
-        <p className="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0 app-text-right app-text-grey">
-          {status ? `${vcs_revision.substring(0, 7).toUpperCase()} - ${moment(queued_at).format('DD/MM/YYYY, HH:mm')}` : ' '}
+        <p className="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0 app-text-right">
+          {status && (
+            <span className="qa-date-time app-text-grey">
+              {`${vcs_revision.substring(0, 7).toUpperCase()} - ${moment(queued_at).format('DD/MM/YYYY, HH:mm')}`}
+            </span>
+          )}
+          {(status === 'success' || status === 'fixed') && downstream && (
+            <mark className="app-mark govuk-!-margin-left-2">⇨</mark>
+          )}
         </p>
         <p className="govuk-heading-s govuk-!-margin-bottom-0">{status ? title : ' '}</p>
       </div>
@@ -24,10 +31,10 @@ function Card ({ title, data: { lifecycle, status, user = {}, build_num, queued_
           <tbody>
           <tr>
             <td>
-              <p className="govuk-heading-l govuk-!-margin-0">{build_num}</p>
+              <p className="govuk-heading-l govuk-!-margin-0 app-text-overlay">{build_num}</p>
             </td>
             <td>
-              <p className="govuk-!-margin-0">
+              <p className="govuk-!-margin-0 app-text-overlay">
                 {status !== 'success' && status !== 'canceled' ? getJobName(workflows.job_name) : ''}
               </p>
             </td>
@@ -39,7 +46,7 @@ function Card ({ title, data: { lifecycle, status, user = {}, build_num, queued_
           </tbody>
         </table>
       </div>
-    </Fragment>
+    </section>
   )
 }
 

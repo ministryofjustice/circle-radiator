@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 import { ReactComponent as Logo } from '../assets/moj-logotype-crest.svg'
 
-function Header () {
+function Header ({ org, team }) {
   return (
     <Fragment>
 
@@ -14,8 +14,8 @@ function Header () {
 
             <Logo className="moj-header__logotype-crest govuk-header__logotype-crown"/>
             <span className="moj-header__link">
-              <span className="moj-header__link moj-header__link--organisation-name">MoJ D&amp;T</span>&nbsp;
-              <span className="moj-header__link moj-header__link--service-name">Probation in court</span>
+              <span className="moj-header__link moj-header__link--organisation-name">{org}</span>&nbsp;
+              <span className="moj-header__link moj-header__link--service-name">{team}</span>
             </span>
 
           </div>

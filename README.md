@@ -8,16 +8,18 @@ The radiator is designed to run full-screen on a 1080p display with a maximum nu
 
 ## Prerequisites
 
-The radiator requires project configuration JSON data
+The radiator requires configuration JSON data
 
 ```
-./src/data/projects.json
+./src/data/config.json
 ```
 
 An example file is provided.
 
 ```json
 {
+  "org": "Ministry of Justice",
+  "team": "Your team name",
   "projects": [
     {
       "project": "Your project name",
@@ -50,13 +52,3 @@ An example file is provided.
 Build states are based on existing CircleCI colours.
 
 Cancelled jobs can be ignored by setting the *ignoreCancelled* flag if required.
-
-### Ignore changes to projects file
-
-The projects configuration is required in order to run tests so it cannot be omitted. 
-
-Ignore your local changes to the configuration file:
-
-```
-git update-index --skip-worktree src/data/projects.json
-```
