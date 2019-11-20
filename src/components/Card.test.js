@@ -14,7 +14,7 @@ describe('Circle Radiator - Card component', () => {
   })
 
   it('displays the card title', () => {
-    const buildNum = component.find('.govuk-heading-s').text()
+    const buildNum = component.find('.qa-title').text()
     expect(buildNum).toBe('DEV')
   })
 

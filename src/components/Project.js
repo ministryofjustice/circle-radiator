@@ -50,11 +50,27 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
         (prodJobData && fastPollStatuses.some(el => prodJobData.status.includes(el)))
     }
 
-    if (platform && devJobData && (devJobData.status === 'success' ||devJobData.status === 'fixed')) {
+    if (platform && devJobData && (devJobData.status === 'success' || devJobData.status === 'fixed')) {
       try {
         devJobData.health = await axios.get(`https://${reponame}-dev.${platform}/ping`)
       } catch (e) {
         devJobData.health = e
+      }
+    }
+
+    if (platform && preprodJobData && (preprodJobData.status === 'success' || preprodJobData.status === 'fixed')) {
+      try {
+        preprodJobData.health = await axios.get(`https://${reponame}-preprod.${platform}/ping`)
+      } catch (e) {
+        preprodJobData.health = { status: e.status || 418 }
+      }
+    }
+
+    if (platform && prodJobData && (prodJobData.status === 'success' || prodJobData.status === 'fixed')) {
+      try {
+        prodJobData.health = await axios.get(`https://${reponame}-prod.${platform}/ping`)
+      } catch (e) {
+        prodJobData.health = { status: e.status || 418 }
       }
     }
 

@@ -24,7 +24,7 @@ function Card ({ title, downstream, data: { status, user = {}, build_num, queued
             <mark className="app-mark govuk-!-margin-left-2">⇨</mark>
           )}
         </p>
-        <p className="govuk-heading-s govuk-!-margin-bottom-0">{status ? title : ' '}</p>
+        <p className="qa-title govuk-heading-s govuk-!-margin-bottom-0">{status ? title : ' '}</p>
       </div>
       <div className={`app-card app-card--${status}`}>
         <table className="app-card-table" role="presentation">
@@ -46,8 +46,8 @@ function Card ({ title, downstream, data: { status, user = {}, build_num, queued
           </tbody>
         </table>
       </div>
-      <div className={`app-card app-card--small app-card--${!health.status ? '' : health.status === 200 ? 'success': 'failed'}`}>
-        <p className="govuk-heading-s app-text-overlay govuk-!-margin-bottom-0 govuk-!-margin-top-1">{ !health.status ? '' : health.status === 200 ? 'Healthy': 'Health problem' }</p>
+      <div className={`app-card app-card--small app-card--${!health.status ? '' : health.status === 200 ? 'success' : 'failed'}`}>
+        <p className="govuk-heading-s app-text-overlay govuk-!-margin-bottom-0 govuk-!-margin-top-1">{ !health.status ? '' : health.status === 200 ? 'Healthy': 'Error' }</p>
       </div>
     </section>
   )
