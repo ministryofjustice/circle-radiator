@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-function Card ({ title, downstream, data: { status, user = {}, build_num, queued_at, workflows = {}, committer_name, vcs_revision = '' } = {} }) {
+function Card ({ title, downstream, data: { status, user = {}, build_num, queued_at, workflows = {}, committer_name, vcs_revision = '', health = {} } = {} }) {
 
   function getInitials ($name = '') {
     return !user.avatar_url && $name ? $name.match(/\b(\w)/g).join('').toUpperCase() : ''
@@ -45,6 +45,9 @@ function Card ({ title, downstream, data: { status, user = {}, build_num, queued
           </tr>
           </tbody>
         </table>
+      </div>
+      <div className={`app-card app-card--small app-card--${!health.status ? '' : health.status === 200 ? 'success': 'failed'}`}>
+        <p className="govuk-heading-s app-text-overlay govuk-!-margin-bottom-0 govuk-!-margin-top-1">{ !health.status ? '' : health.status === 200 ? 'Healthy': 'Health problem' }</p>
       </div>
     </section>
   )

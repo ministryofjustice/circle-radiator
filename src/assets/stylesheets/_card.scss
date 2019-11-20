@@ -11,6 +11,10 @@
   padding: 0 20px;
   transition: background-color 1s ease;
 
+  &--small {
+    height: 35px;
+  }
+
   &--header {
     background-color: $app-background-color-dark;
     border-bottom: 1px solid $app-background-color;
