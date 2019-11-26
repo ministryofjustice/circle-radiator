@@ -14,33 +14,44 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
     try {
       const result = await axios.get(`https://circleci.com/api/v1.1/project/${vcs}/${username}/${reponame}`)
       configureData(result.data)
-    } catch {
-      configureData(void 0)
+    } catch (e) {
+      configureData({ status: e.status || 418 })
     }
   }
 
-  async function configureData ($data) {
+  function fetchHealthData ($deployment, $status) {
+    let response
+    if ($status !== 'success' && $status !== 'fixed') {
+      return Promise.resolve({})
+    }
+    try {
+      response = axios.get(`https://${reponame}-${$deployment}.${platform}/ping`)
+    } catch (e) {
+      response = Promise.resolve({ status: e.status || 418 })
+    }
+    return response
+  }
+
+  async function configureData ($data = []) {
 
     let devJobData = {}
     let preprodJobData = {}
     let prodJobData = {}
 
-    if ($data) {
-      devJobData = $data.filter($item => {
-        return isWatchedBuild($item) && $item.workflows.job_name !== preprodjob && $item.workflows.job_name !== prodjob
-      }).shift()
+    devJobData = $data.filter($item => {
+      return isWatchedBuild($item) && $item.workflows.job_name !== preprodjob && $item.workflows.job_name !== prodjob
+    }).shift()
 
-      preprodJobData = $data.filter($item => {
-        return isWatchedBuild($item) && $item.workflows.job_name === preprodjob
-      }).shift()
+    preprodJobData = $data.filter($item => {
+      return isWatchedBuild($item) && $item.workflows.job_name === preprodjob
+    }).shift()
 
-      prodJobData = $data.filter($item => {
-        return isWatchedBuild($item) && $item.workflows.job_name === prodjob
-      }).shift()
+    prodJobData = $data.filter($item => {
+      return isWatchedBuild($item) && $item.workflows.job_name === prodjob
+    }).shift()
 
-      function isWatchedBuild ($item) {
-        return $item.branch === 'master' && $item.hasOwnProperty('workflows') && (!ignoreCancelled || $item.status !== 'canceled')
-      }
+    function isWatchedBuild ($item) {
+      return $item.branch === 'master' && $item.hasOwnProperty('workflows') && (!ignoreCancelled || $item.status !== 'canceled')
     }
 
     function shouldFastPoll () {
@@ -50,28 +61,10 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
         (prodJobData && fastPollStatuses.some(el => prodJobData.status.includes(el)))
     }
 
-    if (platform && devJobData && (devJobData.status === 'success' || devJobData.status === 'fixed')) {
-      try {
-        devJobData.health = await axios.get(`https://${reponame}-dev.${platform}/ping`)
-      } catch (e) {
-        devJobData.health = e
-      }
-    }
-
-    if (platform && preprodJobData && (preprodJobData.status === 'success' || preprodJobData.status === 'fixed')) {
-      try {
-        preprodJobData.health = await axios.get(`https://${reponame}-preprod.${platform}/ping`)
-      } catch (e) {
-        preprodJobData.health = { status: e.status || 418 }
-      }
-    }
-
-    if (platform && prodJobData && (prodJobData.status === 'success' || prodJobData.status === 'fixed')) {
-      try {
-        prodJobData.health = await axios.get(`https://${reponame}-prod.${platform}/ping`)
-      } catch (e) {
-        prodJobData.health = { status: e.status || 418 }
-      }
+    if (platform) {
+      devJobData.health = await fetchHealthData('dev', devJobData.status)
+      preprodJobData.health = await fetchHealthData('preprod', preprodJobData.status)
+      prodJobData.health = await fetchHealthData('prod', prodJobData.status)
     }
 
     setData({ dev: devJobData, preprod: preprodJobData, prod: prodJobData })
