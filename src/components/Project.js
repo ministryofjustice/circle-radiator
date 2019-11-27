@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import Card from './Card'
 
-function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob, prodjob, platform, ignoreCancelled } }) {
+function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob, prodjob, health = {}, ignoreCancelled } }) {
 
   const [data, setData] = useState({ dev: {}, preprod: {}, prod: {} })
   const fetchDataCallback = useCallback(fetchData, [])
@@ -21,11 +21,11 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
 
   function fetchHealthData ($deployment, $status) {
     let response
-    if ($status !== 'success' && $status !== 'fixed') {
+    if (($status !== 'success' && $status !== 'fixed') || !$deployment) {
       return Promise.resolve({})
     }
     try {
-      response = axios.get(`https://${reponame}-${$deployment}.${platform}/ping`)
+      response = axios.get($deployment)
     } catch (e) {
       response = Promise.resolve({ status: e.status || 418 })
     }
@@ -61,10 +61,16 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
         (prodJobData && fastPollStatuses.some(el => prodJobData.status.includes(el)))
     }
 
-    if (platform) {
-      devJobData.health = await fetchHealthData('dev', devJobData.status)
-      preprodJobData.health = await fetchHealthData('preprod', preprodJobData.status)
-      prodJobData.health = await fetchHealthData('prod', prodJobData.status)
+    if (health) {
+      if (devJobData) {
+        devJobData.health = await fetchHealthData(health.dev, devJobData.status)
+      }
+      if (preprodJobData) {
+        preprodJobData.health = await fetchHealthData(health.preprod, preprodJobData.status)
+      }
+      if (prodJobData) {
+        prodJobData.health = await fetchHealthData(health.prod, prodJobData.status)
+      }
     }
 
     setData({ dev: devJobData, preprod: preprodJobData, prod: prodJobData })
