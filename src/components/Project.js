@@ -19,24 +19,22 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
     }
   }
 
-  function fetchHealthData ($deployment, $status) {
-    let response
+  async function fetchHealthData ($deployment, $status) {
     if (($status !== 'success' && $status !== 'fixed') || !$deployment) {
       return Promise.resolve({})
     }
     try {
-      response = axios.get($deployment)
+      return await axios.get(`http://localhost:3030/health/${$deployment}`)
     } catch (e) {
-      response = Promise.resolve({ status: e.status || 418 })
+      return Promise.resolve({ status: e.status || 418 })
     }
-    return response
   }
 
   async function configureData ($data = []) {
 
-    let devJobData = {}
-    let preprodJobData = {}
-    let prodJobData = {}
+    let devJobData
+    let preprodJobData
+    let prodJobData
 
     devJobData = $data.filter($item => {
       return isWatchedBuild($item) && $item.workflows.job_name !== preprodjob && $item.workflows.job_name !== prodjob
@@ -61,16 +59,27 @@ function Project ({ data: { vcs = 'gh', username, reponame, project, preprodjob,
         (prodJobData && fastPollStatuses.some(el => prodJobData.status.includes(el)))
     }
 
-    if (health) {
-      if (devJobData) {
+    devJobData = devJobData || await axios.get(`http://localhost:3030/build/dev-${reponame}`)
+    preprodJobData = preprodJobData || await axios.get(`http://localhost:3030/build/preprod-${reponame}`)
+    prodJobData = prodJobData || await axios.get(`http://localhost:3030/build/prod-${reponame}`)
+
+    if (devJobData) {
+      if (health) {
         devJobData.health = await fetchHealthData(health.dev, devJobData.status)
       }
-      if (preprodJobData) {
+      await axios.put('http://localhost:3030/build', { type: 'dev', data: devJobData })
+    }
+    if (preprodJobData) {
+      if (health) {
         preprodJobData.health = await fetchHealthData(health.preprod, preprodJobData.status)
       }
-      if (prodJobData) {
+      await axios.put('http://localhost:3030/build', { type: 'preprod', data: preprodJobData })
+    }
+    if (prodJobData) {
+      if (health) {
         prodJobData.health = await fetchHealthData(health.prod, prodJobData.status)
       }
+      await axios.put('http://localhost:3030/build', { type: 'prod', data: prodJobData })
     }
 
     setData({ dev: devJobData, preprod: preprodJobData, prod: prodJobData })
