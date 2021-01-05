@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "0.0.17-alpha",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "govuk-frontend": "3.5.0",
     "moment": "2.24.0",
     "react": "16.12.0",
